@@ -1,0 +1,20 @@
+{
+    "order_id_1": ["item_1", "item_2", "item_3"],
+    "order_id_2": ["item_3", "item_4", "item_5"],
+    "order_id_3": ["item_6", "item_7", "item_8"],
+    "order_id_4": ["item_8", "item_9"],
+    "order_id_5": ["item_9", "item_10", "item_11", "item_12"],
+    "order_id_6": ["item_2", "item_3", "item_13", "item_14", "item_15"],
+    "order_id_7": ["item_1", "item_7", "item_6", "item_5"],
+    "order_id_8": ["item_10", "item_9", "item_7", "item_8"],
+    "order_id_9": ["item_10", "item_9", "item_2"],
+    "order_id_10": ["item_10", "item_7", "item_13", "item_14"],
+    "order_id_11": ["item_3", "item_13", "item_8"],
+    "order_id_12": ["item_12", "item_13", "item_11", "item_1"],
+    "order_id_13": ["item_9",  "item_13","item_4"],
+    "order_id_14": ["item_13", "item_14"],
+    "order_id_15": ["item_11"],
+    "order_id_16": ["item_13"]
+
+
+}
