@@ -1,6 +1,7 @@
 
 import json
 
+from typing import Union
 
 
 
@@ -47,7 +48,7 @@ def get_center_locations_for_item(item: str):
 #     return order_to_location
 
 
-def get_most_similar_order(locations: list[str], orders_dict_x: dict[str, list[str]], selected_orders: list[str]) -> str | None:
+def get_most_similar_order(locations: list[str], orders_dict_x: dict[str, list[str]], selected_orders: list[str]) -> Union[str, None]:
     # get the order with the most overlap
     max_overlap = 0
     max_order = None
@@ -63,6 +64,7 @@ def get_most_similar_order(locations: list[str], orders_dict_x: dict[str, list[s
         }
         for item in order_info:
             loc = get_item_best_location_locations(item, locations)
+            print(type(locations))
             if loc in locations:
                 order_diff_over[order_key][OVERLAP] += 1
                 continue
@@ -98,7 +100,7 @@ def get_item_best_location_locations(item: str, locations: list[str], ):
     return centers[0]
 
 
-def get_orders_locations(order_key: str, locations: list[str],):
+def get_orders_locations( orders_dict_x: dict[str, list[str]] ,order_key: str, locations: list[str],):
     ''' get the orders location for the order
     
     return: order_locations: dict[str, str] (item, location)
@@ -139,15 +141,24 @@ def create_batch(orders_dict_x: dict[str, list[str]]):
     # select an order to process
     most_used = get_order_with_most_locations(orders_dict_x)
     orders_to_pick: list[str] = [most_used]
-    # locations = get_orders_locations(most_used, [])
-    location_to_pick: list[int] = get_orders_locations(most_used, [])
+    location_to_pick: list[int] = list(get_orders_locations(orders_dict_x, most_used, []).values())
     for i in range(MAX_BATCH):
-        order_to_add = get_most_similar_order(location_to_pick, orders_to_pick)
+        order_to_add = get_most_similar_order(location_to_pick, orders_dict_x , orders_to_pick)
         orders_to_pick.append(order_to_add)
         # get the order locations
-        items_loc_for_order = get_orders_locations(order_to_add, location_to_pick)
-        location_to_pick = list(set(list(items_loc_for_order.values()) + location_to_pick))
+        t = get_orders_locations(orders_dict_x, order_to_add, location_to_pick).values()
+        items_loc_for_order = list(t)
+        location_to_pick = list(set(items_loc_for_order + location_to_pick))
         del orders_dict_x[order_to_add]
-    print(location_to_pick)
+
+    print(location_to_pick, location_to_pick)
+    return [orders_to_pick, location_to_pick];
+
+
+def create_full_batches(orders_dict_x: dict[str, list[str]]):
+    
+    while len(orders_dict_x) > 0:
+        orders, locs = create_batch(orders_dict_x)
+        print(orders, locs)
 
 create_batch(orders_dict_x)
