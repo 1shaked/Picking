@@ -156,9 +156,10 @@ def create_batch(orders_dict_x: dict[str, list[str]]):
 
 
 def create_full_batches(orders_dict_x: dict[str, list[str]]):
-    
+    batches = []
     while len(orders_dict_x) > 0:
         orders, locs = create_batch(orders_dict_x)
         print(orders, locs)
+        batches.append([orders, locs])
 
 create_batch(orders_dict_x)
