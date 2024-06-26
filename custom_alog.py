@@ -168,13 +168,7 @@ def get_orders_locations( orders_dict_x: dict[str, list[str]] ,order_key: str, l
 # with open('dummyData/location_to_item_x.json') as f:
 #     location_to_item_x = json.load(f)
 
-orders_dict_x: dict[str, list[str]] = {}
-with open('dummyData/orders_x.json') as f:
-    orders_dict_x = json.load(f)
 
-center_location_x: dict[str, list[str]] = {}
-with open('dummyData/center_location_x.json') as f:
-    center_location = json.load(f)
 
 
 
@@ -216,6 +210,15 @@ def create_full_batches(orders_dict_x: dict[str, list[str]]):
             "locations": locs
         })
     return batches
+
+
+orders_dict_x: dict[str, list[str]] = {}
+with open('dummyData/orders_x.json') as f:
+    orders_dict_x = json.load(f)
+
+center_location_x: dict[str, list[str]] = {}
+with open('dummyData/center_location_x.json') as f:
+    center_location = json.load(f)
 
 batches = create_full_batches(orders_dict_x)
 
