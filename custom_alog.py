@@ -212,14 +212,15 @@ def create_full_batches(orders_dict_x: dict[str, list[str]]):
     return batches
 
 
-orders_dict_x: dict[str, list[str]] = {}
-with open('dummyData/orders_x.json') as f:
-    orders_dict_x = json.load(f)
+if __name__ == '__main__':
+    orders_dict_x: dict[str, list[str]] = {}
+    with open('dummyData/orders_x.json') as f:
+        orders_dict_x = json.load(f)
 
-center_location_x: dict[str, list[str]] = {}
-with open('dummyData/center_location_x.json') as f:
-    center_location = json.load(f)
+    center_location_x: dict[str, list[str]] = {}
+    with open('dummyData/center_location_x.json') as f:
+        center_location = json.load(f)
 
-batches = create_full_batches(orders_dict_x)
+    batches = create_full_batches(orders_dict_x)
 
-print(batches)
+    print(batches)
