@@ -12,11 +12,11 @@ MAX_BATCH = 3
 RADIUS = 2
 
 
-
-def get_center_locations_for_item(item: str):
+# dummyData/center_location_x.json
+def get_center_locations_for_item(item: str, file_name='sim/center_locations.json'):
     # get the center location for the item
     center_location_x: dict[str, list[str]] = {}
-    with open('dummyData/center_location_x.json') as f:
+    with open(file_name) as f:
         center_location_x = json.load(f)
 
     items_locations: list[str] = []
