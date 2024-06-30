@@ -64,7 +64,6 @@ def get_most_similar_order(locations: list[str], orders_dict_x: dict[str, list[s
         }
         for item in order_info:
             loc = get_item_best_location_locations(item, locations)
-            print(type(locations))
             if loc in locations:
                 order_diff_over[order_key][OVERLAP] += 1
                 continue
@@ -75,28 +74,42 @@ def get_most_similar_order(locations: list[str], orders_dict_x: dict[str, list[s
     #         max_overlap = order_info[OVERLAP]
     #         max_order = order_key
     # return max_order
-    return get_order_with_most_overlap(order_diff_over)
+    return get_order_with_most_linear(order_diff_over)
 
 
 def get_order_with_most_overlap(order_diff_over: dict[str, list[str]]):
     '''
     this function return the order with the most overlap
     '''
-    max_overlap = 0
+    max_overlap = -1_000_000
     max_order = None
     for order_key in order_diff_over:
         order_info = order_diff_over[order_key]
         if order_info[OVERLAP] > max_overlap:
             max_overlap = order_info[OVERLAP]
             max_order = order_key
-    return max_order
+    return max_order , max_overlap
+
+def get_order_with_least_difference(order_diff_over: dict[str, list[str]]):
+    '''
+    this function return the order with the most overlap
+    '''
+    max_overlap = -1_000_000
+    max_order = None
+    for order_key in order_diff_over:
+        order_info = order_diff_over[order_key]
+        if (-order_info[DIFFERENCE]) > max_overlap:
+            max_overlap = order_info[OVERLAP]
+            max_order = order_key
+    return max_order , max_overlap
+
 
 
 def get_order_with_most_linear(order_diff_over: dict[str, list[str]]):
     '''
     this function return the order with the most overlap by overlap - difference
     '''
-    max_overlap = -500 # need to be - infinity
+    max_overlap = -1_000_000 # need to be - infinity
     max_order = None
     for order_key in order_diff_over:
         order_info = order_diff_over[order_key]
@@ -104,7 +117,7 @@ def get_order_with_most_linear(order_diff_over: dict[str, list[str]]):
         if  total > max_overlap:
             max_overlap = total
             max_order = order_key
-    return max_order
+    return max_order, max_overlap
 
 def get_order_with_most_poly(order_diff_over: dict[str, list[str]]):
     '''
@@ -118,7 +131,7 @@ def get_order_with_most_poly(order_diff_over: dict[str, list[str]]):
         if  total > max_overlap:
             max_overlap = total
             max_order = order_key
-    return max_order
+    return max_order, max_overlap
 
 def get_order_with_most_locations(orders_dict_x: dict[str, list[str]]):
     # get the order with the most location
@@ -129,7 +142,7 @@ def get_order_with_most_locations(orders_dict_x: dict[str, list[str]]):
         if len(order_info) > max_location:
             max_location = len(order_info)
             max_order = order_key
-    return max_order
+    return max_order, max_location
 
 def get_item_best_location_locations(item: str, locations: list[str], ):
     # get the items location for the order
@@ -177,14 +190,14 @@ def get_orders_locations( orders_dict_x: dict[str, list[str]] ,order_key: str, l
 
 def create_batch(orders_dict_x: dict[str, list[str]]):
     # select an order to process
-    most_used = get_order_with_most_locations(orders_dict_x)
+    most_used, score = get_order_with_most_locations(orders_dict_x)
     orders_to_pick: list[str] = [most_used]
     if most_used == None:
         return [orders_to_pick, location_to_pick];
 
     location_to_pick: list[int] = list(get_orders_locations(orders_dict_x, most_used, []).values())
     for i in range(MAX_BATCH - 1):
-        order_to_add = get_most_similar_order(location_to_pick, orders_dict_x , orders_to_pick)
+        order_to_add, score = get_most_similar_order(location_to_pick, orders_dict_x , orders_to_pick)
         orders_to_pick.append(order_to_add)
         if order_to_add == None:
             break
@@ -196,7 +209,6 @@ def create_batch(orders_dict_x: dict[str, list[str]]):
     del orders_dict_x[most_used]
     
 
-    print(orders_to_pick, location_to_pick)
     return [orders_to_pick, location_to_pick];
 
 
@@ -204,7 +216,6 @@ def create_full_batches(orders_dict_x: dict[str, list[str]]):
     batches = []
     while len(orders_dict_x) > 0:
         orders, locs = create_batch(orders_dict_x)
-        print(orders, locs)
         batches.append({
             "orders": orders,
             "locations": locs
