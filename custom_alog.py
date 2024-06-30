@@ -24,6 +24,8 @@ def get_center_locations_for_item(item: str, file_name='sim/center_locations.jso
         if item in center_location_x[loc]:
             items_locations.append(loc)
 
+    if len(items_locations) == 0:
+        return None
     return items_locations
         
 
